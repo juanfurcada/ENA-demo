@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENA Sport | Mi Cuenta</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen" class="screen active">
+    <!-- Reset button -->
+    <button id="reset-btn" class="reset-btn" title="Reiniciar Demo">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Reiniciar
+    </button>
+
+    <div class="login-page">
+      <!-- Left side: branding -->
+      <aside class="login-aside">
+        <div class="aside-content">
+          <div class="aside-logo">
+            <span class="logo-mark">ENA</span>
+            <span class="logo-mark-sub">SPORT</span>
+          </div>
+          <h2 class="aside-headline">Descubrí tu potencial.</h2>
+          <p class="aside-sub">Suplementación deportiva pensada para tu rendimiento, recuperación y bienestar.</p>
+          <div class="aside-features">
+            <div class="aside-feature">
+              <div class="feature-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              </div>
+              <div>
+                <strong>Envíos a todo el país</strong>
+                <span>Recibilo en 24/72 hs hábiles</span>
+              </div>
+            </div>
+            <div class="aside-feature">
+              <div class="feature-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+              </div>
+              <div>
+                <strong>Productos certificados</strong>
+                <span>Calidad respaldada por ENA</span>
+              </div>
+            </div>
+            <div class="aside-feature">
+              <div class="feature-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </div>
+              <div>
+                <strong>Asesoramiento experto</strong>
+                <span>Chateá con nuestros nutricionistas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right side: form -->
+      <main class="login-main">
+        <div class="login-container">
+          <div class="login-header">
+            <div class="brand-mini">
+              <span class="brand-mini-mark">ENA SPORT</span>
+            </div>
+            <h1 class="login-title">Ingresá a tu cuenta</h1>
+            <p class="login-subtitle">Accedé a tus pedidos, suplementos y beneficios</p>
+          </div>
+
+          <form id="login-form" class="login-form" autocomplete="off">
+            <div class="input-group">
+              <label for="username">Email o usuario</label>
+              <input type="text" id="username" placeholder="tu@email.com" required />
+            </div>
+            <div class="input-group">
+              <label for="password">Contraseña</label>
+              <div class="password-wrapper">
+                <input type="password" id="password" placeholder="••••••••" required />
+                <button type="button" class="toggle-pw" id="toggle-pw" tabindex="-1">
+                  <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" class="login-btn">
+              <span class="btn-text">Ingresar</span>
+              <span class="btn-loader" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" values="0 12 12;360 12 12" dur="0.8s" repeatCount="indefinite"/></circle></svg>
+              </span>
+            </button>
+            <div id="error-msg" class="error-msg"></div>
+            <div class="signup-line">
+              ¿No tenés cuenta? <a href="#" class="signup-link">Registrate</a>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD SCREEN ===== -->
+  <div id="dashboard-screen" class="screen">
+    <!-- Top nav -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">
+          <span class="logo-ena">ENA</span><span class="logo-sport">SPORT</span>
+        </a>
+        <div class="nav-links">
+          <a href="#" class="nav-link active">Mi cuenta</a>
+          <a href="#" class="nav-link">Tienda</a>
+          <a href="#" class="nav-link">Combos</a>
+          <a href="#" class="nav-link">Blog</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="icon-btn" title="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="icon-btn cart-btn" title="Carrito">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-count">2</span>
+        </button>
+        <div class="nav-user">
+          <div class="avatar" id="user-avatar"></div>
+          <div class="user-info">
+            <span class="user-name" id="nav-user-name"></span>
+            <span class="user-role" id="nav-user-role"></span>
+          </div>
+        </div>
+        <button id="logout-btn" class="logout-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Salir
+        </button>
+      </div>
+    </nav>
+
+    <!-- Dashboard content -->
+    <main class="dashboard">
+      <!-- Welcome banner -->
+      <section class="welcome-banner">
+        <div class="welcome-text">
+          <span class="welcome-eyebrow">MI CUENTA</span>
+          <h1>Hola, <span id="dash-user-name"></span></h1>
+          <p>Gestioná tus pedidos, suscripciones y beneficios desde acá.</p>
+        </div>
+        <div class="welcome-stats">
+          <div class="stat-pill">
+            <span class="stat-number" id="stat-certs">0</span>
+            <span class="stat-label">Logros</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-number" id="stat-courses">0</span>
+            <span class="stat-label">Suplementos activos</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-number" id="stat-hours">2.450</span>
+            <span class="stat-label">Puntos ENA</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Supplements grid -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.91 8.84L8.56 21.18a4.5 4.5 0 0 1-6.36-6.36L14.54 2.47a3 3 0 0 1 4.24 4.24L6.46 19.05a1.5 1.5 0 0 1-2.12-2.12l11.65-11.65"/></svg>
+            Mi stack de suplementos
+          </h2>
+          <a href="#" class="section-link">Ver todos →</a>
+        </div>
+        <div class="courses-grid" id="courses-grid"></div>
+      </section>
+
+      <!-- Achievements -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            Mis logros
+          </h2>
+        </div>
+        <div class="certs-row" id="certs-row"></div>
+      </section>
+
+      <!-- Upcoming deliveries -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Próximas entregas y eventos
+          </h2>
+        </div>
+        <div class="events-list">
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-month">MAY</span>
+              <span class="event-day">15</span>
+            </div>
+            <div class="event-info">
+              <h4>Reposición — Whey Protein 2,05 Lb</h4>
+              <p>Envío programado · Pago confirmado</p>
+            </div>
+            <span class="event-badge live">En camino</span>
+          </div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-month">MAY</span>
+              <span class="event-day">22</span>
+            </div>
+            <div class="event-info">
+              <h4>Webinar — Nutrición y rendimiento</h4>
+              <p>Sesión en vivo con el equipo de nutricionistas ENA</p>
+            </div>
+            <span class="event-badge upcoming">Próximo</span>
+          </div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-month">JUN</span>
+              <span class="event-day">03</span>
+            </div>
+            <div class="event-info">
+              <h4>Lanzamiento Combo Performance 2.0</h4>
+              <p>Acceso anticipado para clientes ENA</p>
+            </div>
+            <span class="event-badge exam">Exclusivo</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 ENA Sport · Descubrí tu potencial.</span>
+        <div class="footer-links">
+          <a href="#">Ayuda</a>
+          <a href="#">Envíos</a>
+          <a href="#">Devoluciones</a>
+          <a href="#">Términos</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://plug-platform.devrev.ai/static/plug.js"></script>
+  <script>
+    window.plugSDK.init({
+      app_id: 'DvRvStPZG9uOmNvcmU6ZHZydi11cy0xOmRldm8vMWprNURKVU5lZTpwbHVnX3NldHRpbmcvMV9ffHxfXzIwMjYtMDQtMjggMTQ6MDA6NDIuMDM3Nzg4NjY0ICswMDAwIFVUQw==xlxendsDvRv',
+      disable_plug_chat_window: false,
+      enable_default_launcher: true,
+    });
+  </script>
+</body>
+</html>
