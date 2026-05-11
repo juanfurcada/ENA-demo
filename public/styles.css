@@ -73,6 +73,9 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
+.login-aside { order: 2; }
+.login-main { order: 1; }
+
 .login-aside {
   background: var(--black);
   color: var(--white);
