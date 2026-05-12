@@ -25,7 +25,7 @@ const users = {
   rodrigo: {
     username: 'rodrigo',
     name: 'Rodrigo Peredo',
-    email: 'jbeinesfurcada@gmail.com',
+    email: 'juan.furcada@devrev.ai',
     role: 'Cliente ENA Sport',
     department: 'Plan Performance',
     accessEnabled: false,
