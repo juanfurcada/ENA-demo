@@ -15,11 +15,11 @@ Abrí http://localhost:3004
 
 ## Variables de entorno
 
-| Variable             | Descripción                                                  |
-|----------------------|--------------------------------------------------------------|
-| `GMAIL_USER`         | Cuenta Gmail que envía los emails                            |
-| `GMAIL_APP_PASSWORD` | App password de Gmail (no la contraseña normal)              |
-| `PORT`               | Puerto del server (default: 3004)                            |
+| Variable          | Descripción                                                           |
+|-------------------|-----------------------------------------------------------------------|
+| `RESEND_API_KEY`  | API key de Resend (resend.com → API Keys)                             |
+| `EMAIL_FROM`      | Remitente (default: `ENA Sport <onboarding@resend.dev>`)              |
+| `PORT`            | Puerto del server (default: 3004)                                     |
 
 ## Flujo de la demo
 

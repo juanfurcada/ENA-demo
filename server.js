@@ -1,23 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 
-const GMAIL_USER = process.env.GMAIL_USER;
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const EMAIL_FROM = process.env.EMAIL_FROM || 'ENA Sport <onboarding@resend.dev>';
 
-if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
-  console.warn('⚠️  GMAIL_USER y/o GMAIL_APP_PASSWORD no configurados — el envío de emails va a fallar.');
+if (!RESEND_API_KEY) {
+  console.warn('⚠️  RESEND_API_KEY no configurado — el envío de emails va a fallar.');
 }
 
-const mailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: GMAIL_USER,
-    pass: GMAIL_APP_PASSWORD,
-  },
-});
+const resend = new Resend(RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3004;
@@ -111,9 +105,9 @@ app.post('/api/enable-access', (req, res) => {
     message: `Acceso habilitado para ${user.name}`,
   });
 
-  // Send email notification via Gmail (not awaited)
-  mailTransporter.sendMail({
-    from: `"ENA Sport — Portal de Clientes" <${GMAIL_USER}>`,
+  // Send email via Resend (not awaited — fire-and-forget)
+  resend.emails.send({
+    from: EMAIL_FROM,
     to: user.email,
     subject: '🔓 Tu cuenta de ENA Sport fue restablecida',
     html: `
@@ -133,8 +127,11 @@ app.post('/api/enable-access', (req, res) => {
       </div>
     `,
   })
-    .then(() => console.log(`   📧 Email enviado a ${user.email}\n`))
-    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr.message));
+    .then(({ data, error }) => {
+      if (error) console.error('   ⚠️  Email failed:', error);
+      else console.log(`   📧 Email enviado a ${user.email} (id ${data.id})\n`);
+    })
+    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr));
 });
 
 // GET /api/status/:username
@@ -175,8 +172,8 @@ app.post('/api/exam-retake', (req, res) => {
     message: `Cupón enviado a ${user.name}`,
   });
 
-  mailTransporter.sendMail({
-    from: `"ENA Sport — Centro de Beneficios" <${GMAIL_USER}>`,
+  resend.emails.send({
+    from: EMAIL_FROM,
     to: user.email,
     subject: '🎁 Tu cupón ENA Sport e instrucciones de uso',
     html: `
@@ -203,8 +200,11 @@ app.post('/api/exam-retake', (req, res) => {
       </div>
     `,
   })
-    .then(() => console.log(`   📧 Email de cupón enviado a ${user.email}\n`))
-    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr.message));
+    .then(({ data, error }) => {
+      if (error) console.error('   ⚠️  Email failed:', error);
+      else console.log(`   📧 Email de cupón enviado a ${user.email} (id ${data.id})\n`);
+    })
+    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr));
 });
 
 // POST /api/reset
