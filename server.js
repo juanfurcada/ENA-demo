@@ -86,7 +86,7 @@ app.post('/api/login', (req, res) => {
 });
 
 // POST /api/enable-access — DevRev calls this
-app.post('/api/enable-access', async (req, res) => {
+app.post('/api/enable-access', (req, res) => {
   const { username, newPassword } = req.body;
 
   if (!username || !newPassword) {
@@ -105,38 +105,36 @@ app.post('/api/enable-access', async (req, res) => {
   console.log(`\n✅ Acceso habilitado para ${user.name} (${username})`);
   console.log(`   Contraseña asignada: ${newPassword}\n`);
 
-  // Send email notification via Gmail
-  try {
-    await mailTransporter.sendMail({
-      from: `"ENA Sport — Portal de Clientes" <${GMAIL_USER}>`,
-      to: user.email,
-      subject: '🔓 Tu cuenta de ENA Sport fue restablecida',
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;background:#0A0F08;color:#F0F5EC;padding:32px;border-radius:12px;">
-          <div style="text-align:center;margin-bottom:24px;">
-            <h2 style="color:#C4D82E;margin:0;letter-spacing:2px;">ENA SPORT</h2>
-            <p style="color:#9AA88A;font-size:13px;">Acceso restablecido</p>
-          </div>
-          <p>Hola <strong>${user.name}</strong>,</p>
-          <p>Reactivamos el acceso a tu cuenta. Estas son tus nuevas credenciales:</p>
-          <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:16px 0;">
-            <p style="margin:4px 0;"><strong>Usuario:</strong> ${username}</p>
-            <p style="margin:4px 0;"><strong>Contraseña:</strong> <code style="background:#C4D82E;color:#0A0F08;padding:2px 8px;border-radius:4px;font-weight:bold;">${newPassword}</code></p>
-          </div>
-          <p style="color:#9AA88A;font-size:12px;">Si no solicitaste este cambio, contactá a soporte inmediatamente.</p>
-          <p style="color:#9AA88A;font-size:11px;margin-top:24px;text-align:center;letter-spacing:1px;">Descubrí tu potencial.</p>
-        </div>
-      `,
-    });
-    console.log(`   📧 Email enviado a ${user.email}\n`);
-  } catch (emailErr) {
-    console.error('   ⚠️  Email failed:', emailErr.message);
-  }
-
+  // Respond immediately, send email in background (fire-and-forget)
   res.json({
     success: true,
     message: `Acceso habilitado para ${user.name}`,
   });
+
+  // Send email notification via Gmail (not awaited)
+  mailTransporter.sendMail({
+    from: `"ENA Sport — Portal de Clientes" <${GMAIL_USER}>`,
+    to: user.email,
+    subject: '🔓 Tu cuenta de ENA Sport fue restablecida',
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;background:#0A0F08;color:#F0F5EC;padding:32px;border-radius:12px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <h2 style="color:#C4D82E;margin:0;letter-spacing:2px;">ENA SPORT</h2>
+          <p style="color:#9AA88A;font-size:13px;">Acceso restablecido</p>
+        </div>
+        <p>Hola <strong>${user.name}</strong>,</p>
+        <p>Reactivamos el acceso a tu cuenta. Estas son tus nuevas credenciales:</p>
+        <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:16px 0;">
+          <p style="margin:4px 0;"><strong>Usuario:</strong> ${username}</p>
+          <p style="margin:4px 0;"><strong>Contraseña:</strong> <code style="background:#C4D82E;color:#0A0F08;padding:2px 8px;border-radius:4px;font-weight:bold;">${newPassword}</code></p>
+        </div>
+        <p style="color:#9AA88A;font-size:12px;">Si no solicitaste este cambio, contactá a soporte inmediatamente.</p>
+        <p style="color:#9AA88A;font-size:11px;margin-top:24px;text-align:center;letter-spacing:1px;">Descubrí tu potencial.</p>
+      </div>
+    `,
+  })
+    .then(() => console.log(`   📧 Email enviado a ${user.email}\n`))
+    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr.message));
 });
 
 // GET /api/status/:username
@@ -155,7 +153,7 @@ app.get('/api/status/:username', (req, res) => {
 });
 
 // POST /api/exam-retake — DevRev calls this to send a voucher / reorder code
-app.post('/api/exam-retake', async (req, res) => {
+app.post('/api/exam-retake', (req, res) => {
   const { username, voucherCode } = req.body;
 
   if (!username || !voucherCode) {
@@ -171,44 +169,42 @@ app.post('/api/exam-retake', async (req, res) => {
   console.log(`\n🎟️  Cupón emitido para ${user.name} (${username})`);
   console.log(`   Código: ${voucherCode}\n`);
 
-  try {
-    await mailTransporter.sendMail({
-      from: `"ENA Sport — Centro de Beneficios" <${GMAIL_USER}>`,
-      to: user.email,
-      subject: '🎁 Tu cupón ENA Sport e instrucciones de uso',
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;background:#0A0F08;color:#F0F5EC;padding:32px;border-radius:12px;">
-          <div style="text-align:center;margin-bottom:24px;">
-            <h2 style="color:#C4D82E;margin:0;letter-spacing:2px;">ENA SPORT</h2>
-            <p style="color:#9AA88A;font-size:13px;">Centro de Beneficios</p>
-          </div>
-          <p>Hola <strong>${user.name}</strong>,</p>
-          <p>Tu cupón de descuento fue aprobado. Acá tenés el código y los pasos para usarlo:</p>
-          <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:16px 0;text-align:center;">
-            <p style="margin:0 0 4px 0;font-size:12px;color:#9AA88A;">TU CÓDIGO DE CUPÓN</p>
-            <p style="margin:0;font-size:22px;font-weight:bold;letter-spacing:2px;color:#C4D82E;">${voucherCode}</p>
-          </div>
-          <h3 style="color:#F0F5EC;font-size:15px;margin:24px 0 12px 0;">Cómo canjearlo:</h3>
-          <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:0 0 16px 0;">
-            <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 1:</strong> Entrá a tu cuenta en <a href="https://www.enasport.com" style="color:#A8E063;">enasport.com</a></p>
-            <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 2:</strong> Armá tu carrito con los productos que quieras y andá a <em>Finalizar compra</em>.</p>
-            <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 3:</strong> Ingresá el código <strong>${voucherCode}</strong> en el campo <em>Código de descuento</em>.</p>
-            <p style="margin:0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 4:</strong> Confirmá la compra. El descuento se aplica automáticamente y recibís tu pedido en 24/72 hs hábiles.</p>
-          </div>
-          <p style="color:#9AA88A;font-size:12px;">El cupón es válido por 90 días. Si necesitás ayuda, escribinos por el chat del sitio.</p>
-          <p style="color:#9AA88A;font-size:11px;margin-top:24px;text-align:center;letter-spacing:1px;">Descubrí tu potencial.</p>
-        </div>
-      `,
-    });
-    console.log(`   📧 Email de cupón enviado a ${user.email}\n`);
-  } catch (emailErr) {
-    console.error('   ⚠️  Email failed:', emailErr.message);
-  }
-
+  // Respond immediately, send email in background (fire-and-forget)
   res.json({
     success: true,
     message: `Cupón enviado a ${user.name}`,
   });
+
+  mailTransporter.sendMail({
+    from: `"ENA Sport — Centro de Beneficios" <${GMAIL_USER}>`,
+    to: user.email,
+    subject: '🎁 Tu cupón ENA Sport e instrucciones de uso',
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;background:#0A0F08;color:#F0F5EC;padding:32px;border-radius:12px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <h2 style="color:#C4D82E;margin:0;letter-spacing:2px;">ENA SPORT</h2>
+          <p style="color:#9AA88A;font-size:13px;">Centro de Beneficios</p>
+        </div>
+        <p>Hola <strong>${user.name}</strong>,</p>
+        <p>Tu cupón de descuento fue aprobado. Acá tenés el código y los pasos para usarlo:</p>
+        <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:16px 0;text-align:center;">
+          <p style="margin:0 0 4px 0;font-size:12px;color:#9AA88A;">TU CÓDIGO DE CUPÓN</p>
+          <p style="margin:0;font-size:22px;font-weight:bold;letter-spacing:2px;color:#C4D82E;">${voucherCode}</p>
+        </div>
+        <h3 style="color:#F0F5EC;font-size:15px;margin:24px 0 12px 0;">Cómo canjearlo:</h3>
+        <div style="background:#16201A;border:1px solid #2A3A2A;border-radius:8px;padding:16px;margin:0 0 16px 0;">
+          <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 1:</strong> Entrá a tu cuenta en <a href="https://www.enasport.com" style="color:#A8E063;">enasport.com</a></p>
+          <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 2:</strong> Armá tu carrito con los productos que quieras y andá a <em>Finalizar compra</em>.</p>
+          <p style="margin:0 0 12px 0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 3:</strong> Ingresá el código <strong>${voucherCode}</strong> en el campo <em>Código de descuento</em>.</p>
+          <p style="margin:0;color:#F0F5EC;"><strong style="color:#C4D82E;">Paso 4:</strong> Confirmá la compra. El descuento se aplica automáticamente y recibís tu pedido en 24/72 hs hábiles.</p>
+        </div>
+        <p style="color:#9AA88A;font-size:12px;">El cupón es válido por 90 días. Si necesitás ayuda, escribinos por el chat del sitio.</p>
+        <p style="color:#9AA88A;font-size:11px;margin-top:24px;text-align:center;letter-spacing:1px;">Descubrí tu potencial.</p>
+      </div>
+    `,
+  })
+    .then(() => console.log(`   📧 Email de cupón enviado a ${user.email}\n`))
+    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr.message));
 });
 
 // POST /api/reset
