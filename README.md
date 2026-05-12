@@ -17,8 +17,8 @@ Abrí http://localhost:3004
 
 | Variable          | Descripción                                                           |
 |-------------------|-----------------------------------------------------------------------|
-| `RESEND_API_KEY`  | API key de Resend (resend.com → API Keys)                             |
-| `EMAIL_FROM`      | Remitente (default: `ENA Sport <onboarding@resend.dev>`)              |
+| `SENDGRID_API_KEY` | API key de SendGrid (app.sendgrid.com → Settings → API Keys)         |
+| `EMAIL_FROM`      | Remitente verificado en SendGrid (Single Sender Verification)         |
 | `PORT`            | Puerto del server (default: 3004)                                     |
 
 ## Flujo de la demo

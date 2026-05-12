@@ -1,17 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { Resend } = require('resend');
+const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const EMAIL_FROM = process.env.EMAIL_FROM || 'ENA Sport <onboarding@resend.dev>';
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+const EMAIL_FROM = process.env.EMAIL_FROM || 'ENA Sport <jbeinesfurcada@gmail.com>';
 
-if (!RESEND_API_KEY) {
-  console.warn('⚠️  RESEND_API_KEY no configurado — el envío de emails va a fallar.');
+if (!SENDGRID_API_KEY) {
+  console.warn('⚠️  SENDGRID_API_KEY no configurado — el envío de emails va a fallar.');
+} else {
+  sgMail.setApiKey(SENDGRID_API_KEY);
 }
-
-const resend = new Resend(RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3004;
@@ -105,8 +105,8 @@ app.post('/api/enable-access', (req, res) => {
     message: `Acceso habilitado para ${user.name}`,
   });
 
-  // Send email via Resend (not awaited — fire-and-forget)
-  resend.emails.send({
+  // Send email via SendGrid (not awaited — fire-and-forget)
+  sgMail.send({
     from: EMAIL_FROM,
     to: user.email,
     subject: '🔓 Tu cuenta de ENA Sport fue restablecida',
@@ -127,11 +127,11 @@ app.post('/api/enable-access', (req, res) => {
       </div>
     `,
   })
-    .then(({ data, error }) => {
-      if (error) console.error('   ⚠️  Email failed:', error);
-      else console.log(`   📧 Email enviado a ${user.email} (id ${data.id})\n`);
-    })
-    .catch(emailErr => console.error('   ⚠️  Email failed:', emailErr));
+    .then(([response]) => console.log(`   📧 Email enviado a ${user.email} (status ${response.statusCode})\n`))
+    .catch(emailErr => {
+      console.error('   ⚠️  Email failed:', emailErr.message);
+      if (emailErr.response?.body) console.error('     ', JSON.stringify(emailErr.response.body));
+    });
 });
 
 // GET /api/status/:username
@@ -172,7 +172,7 @@ app.post('/api/exam-retake', (req, res) => {
     message: `Cupón enviado a ${user.name}`,
   });
 
-  resend.emails.send({
+  sgMail.send({
     from: EMAIL_FROM,
     to: user.email,
     subject: '🎁 Tu cupón ENA Sport e instrucciones de uso',
